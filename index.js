@@ -159,8 +159,8 @@ class NominatimCallbackWrapper extends Nominatim {
 
   wrapPromiseWithCallback(promise, callback) {
     return promise
-      .then((data, query) => callback(undefined, data, query))
-      .catch((error, query) => callback(error, undefined, query))
+      .then((data, query) => callback(undefined, data))
+      .catch((error, query) => callback(error, undefined))
   }
 }
 

@@ -64,6 +64,7 @@ This will override the `host` and `secure` options.
 const Nominatim = require('nominatim-geocoder')
 
 const geocoder = Nominatim({
+  delay: 1000, // delay between requests
   secure: false, // enables ssl
   host:'nominatim.openstreetmap.org',
   customUrl: 'http://your-own-nominatim/', // if you want to host your own nominatim
