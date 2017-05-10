@@ -1,0 +1,37 @@
+{
+  "name" : "nominatim-geocoder",
+  "description": "Simple module for geocoding & reverse geocoding with OpenStreetMap. Caching ✔ - Promises ✔ - Rate Limit ✔ - Custom Endpoint ✔",
+  "keywords": [
+    "reverse geocoding",
+    "geocoding",
+    "nominatim",
+    "open street maps",
+    "openstreetmaps",
+    "location service"
+  ],
+  "version": "0.1.0",
+  "author": "Thomas Nordquist",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasnordquist/npm.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "dependencies": {
+    "axios": "^0.16.1",
+    "lru": "^3.1.0",
+    "promise-queue": "^2.2.3",
+    "sha1": "^1.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jasmine": "^2.2.0",
+    "jasmine": "^2.6.0",
+    "mock-http-server": "^0.1.0"
+  }
+}
