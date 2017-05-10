@@ -15,20 +15,20 @@ const SingletonContext = {
 }
 
 class Nominatim {
-  constructor(options) {
-    this.defaultOptions = {
+  constructor(options, queryOptions) {
+    const defaultOptions = {
       secure: false, // enables ssl
       host: 'nominatim.openstreetmap.org',
       customUrl: undefined, // if you want to host your own nominatim
       cache: true,
     }
-
-    this.options = Object.assign({}, this.defaultOptions, options)
-
-    this.queryDefaults = {
+    const queryDefaults = {
       format: 'json',
       limit: 3,
     }
+
+    this.options = Object.assign({}, defaultOptions, options)
+    this.queryDefaults = Object.assign({}, queryDefaults, queryOptions)
   }
 
   static setupCache(size) {
