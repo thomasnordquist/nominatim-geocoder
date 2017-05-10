@@ -2,7 +2,7 @@ const Nominatim = require('../index')
 const ServerMock = require('mock-http-server')
 
 describe('Requests shouldn\'t be concurrent', () => {
-  const nominatim = new Nominatim()
+  const nominatim = new Nominatim({ delay: 0 })
 
   const server = new ServerMock({ host: 'localhost', port: 34512 })
   const host = 'localhost:34512'

@@ -2,7 +2,7 @@ const Nominatim = require('../index')
 const ServerMock = require('mock-http-server')
 
 describe('It should be possible to change the api endpoint', () => {
-  const nominatim = new Nominatim()
+  const nominatim = new Nominatim({ delay: 0 })
   const server = new ServerMock({ host: 'localhost', port: 34512 })
   const host = 'localhost:34512'
   const delayForEachRequest = 200

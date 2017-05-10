@@ -6,7 +6,7 @@ function startAndEndAreWithinRange(start, end, range) {
 }
 
 describe('Cache should work properly', () => {
-  const nominatim = new Nominatim()
+  const nominatim = new Nominatim({ delay: 0 })
 
   const server = new ServerMock({ host: 'localhost', port: 34512 })
   const host = 'localhost:34512'

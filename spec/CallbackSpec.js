@@ -2,7 +2,7 @@ const { NominatimCallback } = require('../index')
 const ServerMock = require('mock-http-server')
 
 describe('Callback should work', () => {
-  const nominatim = new NominatimCallback()
+  const nominatim = new NominatimCallback({ delay: 0 })
   const delayForEachRequest = 100
   const server = new ServerMock({ host: 'localhost', port: 34512 })
   const host = 'localhost:34512'
@@ -41,7 +41,7 @@ describe('Callback should work', () => {
   })
 
   it('callback works', (done) => {
-    nominatim.search({ q: 'callback test' }, {}, (error, response, query) => {
+    nominatim.search({ q: 'callback test' }, {}, (error, response) => {
       expect(response.secret).toBe('response from mock server')
       done()
     })

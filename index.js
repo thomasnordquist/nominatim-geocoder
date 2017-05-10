@@ -21,7 +21,9 @@ class Nominatim {
       host: 'nominatim.openstreetmap.org',
       customUrl: undefined, // if you want to host your own nominatim
       cache: true,
+      delay: 1000, // Delay between requests
     }
+
     const queryDefaults = {
       format: 'json',
       limit: 3,
@@ -75,28 +77,62 @@ class Nominatim {
 
   query(url, query) {
     const queryObject = Object.assign(new Query(), this.queryDefaults, query)
+    const cacheHitInformation = { hit: false }
 
     return SingletonContext.queue.add(() => {
       const promise = new Promise((resolve, reject) => {
         let cachedResponse
         if (cachedResponse = SingletonContext.cache.get(queryObject.hash())) {
+          cacheHitInformation.hit = true
           resolve(cachedResponse)
           return
         }
 
         axios.get(url, { params: queryObject.plainObject() })
           .then((response) => {
-            resolve(response.data, queryObject)
+            resolve(response.data)
           })
           .catch((error) => {
             SingletonContext.cache.remove(queryObject.hash())
-            reject(error, queryObject)
+            reject(error)
           })
       })
 
+      const delayedPromise = this.delayPromise(promise, cacheHitInformation)
+
       // Store promise in cache, resolved promises are self-unwrapping
-      SingletonContext.cache.set(queryObject.hash(), promise)
-      return promise
+      SingletonContext.cache.set(queryObject.hash(), delayedPromise)
+      return delayedPromise
+    })
+  }
+
+  // This method wraps a promise, it waits after a promise is resolved/rejected
+  // and resolves the outer promise when the remaing time after delayBetweenRequests
+  // has passed. Quite a hack...
+  // ToDo: Replace
+  // Note: Rate limiting is subject to the jasmine tests
+  delayPromise(promise, cacheHitInformation) {
+    const start = new Date()
+
+    const handleEndedPromise = (action, responseOrError) => {
+      const end = new Date()
+
+      const timeToWait = this.options.delay - (end - start)
+      const isFromCache = cacheHitInformation.hit
+
+      if (timeToWait > 0 && !isFromCache) {
+        setTimeout(() => action(responseOrError), timeToWait)
+      } else {
+        action(responseOrError) // immediate resolve
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      promise.then((response, query, test) => {
+        handleEndedPromise(resolve, response)
+      }).catch((error, query) => {
+        handleEndedPromise(reject, error)
+      })
     })
   }
 }
