@@ -1,5 +1,5 @@
 {
-  "name" : "nominatim-geocoder",
+  "name": "nominatim-geocoder",
   "description": "Simple module for geocoding & reverse geocoding with OpenStreetMap. Caching ✔ - Promises ✔ - Rate Limit ✔ - Custom Endpoint ✔ - Automated tests ✔",
   "keywords": [
     "reverse geocoding",
@@ -9,10 +9,10 @@
     "openstreetmaps",
     "location service"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Thomas Nordquist",
   "bugs": {
-    "url" : "https://github.com/thomasnordquist/nominatim-geocoder/issues"
+    "url": "https://github.com/thomasnordquist/nominatim-geocoder/issues"
   },
   "repository": {
     "type": "git",
