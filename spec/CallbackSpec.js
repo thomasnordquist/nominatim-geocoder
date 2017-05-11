@@ -1,4 +1,4 @@
-const { NominatimCallback } = require('../index')
+const NominatimCallback = require('../index').NominatimCallback
 const ServerMock = require('mock-http-server')
 
 describe('Callback should work', () => {
