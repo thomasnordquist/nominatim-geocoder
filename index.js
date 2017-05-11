@@ -43,7 +43,7 @@ class Nominatim {
   }
 
   static setupQueue(concurrency, maxQueueLength) {
-    SingletonContext.queue = new Cache(
+    SingletonContext.queue = new Queue(
       concurrency || defaultConcurrency,
       maxQueueLength || defaultMaxQueueLength)
   }
