@@ -7,17 +7,17 @@ npm install --save nominatim-geocoder
 I needed a library which respects the [Nominatim Usage Policy](https://operations.osmfoundation.org/policies/nominatim/) and is capable of custom api endpoints.
 [Installing Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim/Installation) itself is a pretty simple task and should be considered for a bigger workload.
 
-If you are familiar with docker, [nominatim-docker](https://github.com/mediagis/nominatim-docker) might be woth a look.
+If you are familiar with docker, [nominatim-docker](https://github.com/mediagis/nominatim-docker) might be worth a look.
 
 # Usage
 [Nominatim Query parameters](http://wiki.openstreetmap.org/wiki/Nominatim#Parameters)
 
-_Pro tip: In case of well structured data queries like `{country: 'de',  postalcode='10115', street='Somestreet XX'}` instead of `{q: 'Somestreet XX, 10115 Berlin'}` perform much faster_
+_Pro tip: In case of well structured data, queries like `{country: 'de',  postalcode='10115', street='Somestreet XX'}` perform much faster than `{q: 'Somestreet XX, 10115 Berlin'}`_
 
 ### Promises
 ```
 const Nominatim = require('nominatim-geocoder')
-const geocoder = Nominatim()
+const geocoder = new Nominatim()
 
 geocoder.search( { q: 'Berlin, Germany' } )
     .then((response) => {
@@ -29,11 +29,12 @@ geocoder.search( { q: 'Berlin, Germany' } )
 ```
 
 ### Callback
+The callback function has to be the third argument.
 ```
 const Nominatim = require('nominatim-geocoder').NominatimCallback
-const geocoder = Nominatim()
+const geocoder = new Nominatim()
 
-geocoder.search( { q: 'Berlin, Germany' }, function(error, response) {
+geocoder.search( { q: 'Berlin, Germany' }, {}, function(error, response) {
   console.log(error, response)
 })
 ```
@@ -63,7 +64,7 @@ This will override the `host` and `secure` options.
 ```
 const Nominatim = require('nominatim-geocoder')
 
-const geocoder = Nominatim({
+const geocoder = new Nominatim({
   delay: 1000, // delay between requests
   secure: false, // enables ssl
   host:'nominatim.openstreetmap.org',
@@ -83,8 +84,8 @@ const geocoder = Nominatim({/* No options */}, {
 
 ## Good to know
 
-- All requests are cached with the LRU strategy (Least recently used), the datastructure is HashMap (average complexity O(n))
+- All requests are cached with the LRU strategy (Least recently used), the datastructure is a HashMap (average complexity O(n))
 
-- Even though search calls are asynchronous, they will be executed one after anouther via a queue
+- Even though search calls are asynchronous, they will be executed one after another via a queue
 
-- All instances of nominatim share the same cache and execution queue. This means the library can be used across modules without being passed down and still adhere to the Usage Polics
+- All instances of nominatim share the same cache and execution queue. This means the library can be used across modules without being passed down and still adhere to the [Nominatim Usage Policy](https://operations.osmfoundation.org/policies/nominatim/)
