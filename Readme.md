@@ -82,6 +82,22 @@ const geocoder = Nominatim({/* No options */}, {
 })
 ```
 
+### Concurrent requests
+You have your own Nominatim Server and synchronous requests are simply to slow ?
+
+```
+const Nominatim = require('nominatim-geocoder')
+
+// Now you'll have 4 conccurrent requests
+const concurrentRequests = 4
+const maxQueueSize = Infinity
+Nominatim.setupQueue(concurrentRequests, maxQueueSize)
+
+const geocoder = Nominatim({
+    customUrl: 'http://my-nominatim'
+})
+```
+
 ## Good to know
 
 - All requests are cached with the LRU strategy (Least recently used), the datastructure is a HashMap (average complexity O(n))
