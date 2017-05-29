@@ -7,7 +7,7 @@ npm install --save nominatim-geocoder
 I needed a library which respects the [Nominatim Usage Policy](https://operations.osmfoundation.org/policies/nominatim/) and is capable of custom api endpoints.
 [Installing Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim/Installation) itself is a pretty simple task and should be considered for a bigger workload.
 
-If you are familiar with docker, [nominatim-docker](https://github.com/mediagis/nominatim-docker) might be worth a look.
+If you are familiar with docker, [nominatim-docker](https://hub.docker.com/r/thomasnordquist/simple-nominatim) might be worth a look.
 
 # Usage
 [Nominatim Query parameters](http://wiki.openstreetmap.org/wiki/Nominatim#Parameters)
@@ -84,18 +84,47 @@ const geocoder = Nominatim({/* No options */}, {
 
 ### Concurrent requests
 You have your own Nominatim Server and synchronous requests are simply to slow ?
-
 ```
 const Nominatim = require('nominatim-geocoder')
 
-// Now you'll have 4 conccurrent requests
-const concurrentRequests = 4
+// Now you'll have 100 concurrent requests
+const concurrentRequests = 100
 const maxQueueSize = Infinity
 Nominatim.setupQueue(concurrentRequests, maxQueueSize)
 
 const geocoder = Nominatim({
     customUrl: 'http://my-nominatim'
 })
+```
+
+#### Memory usage
+If you are using concurrent request you'll probably have a lot of data. Just pushing all your data to a queue and hope there is enough heap might work, unless you got **>1 million** requests to do.
+
+Throtteling the input is a good way to avoid this.
+
+```
+const cursor = mongodb.collection('document').find({})
+
+let workers = 0
+const maxWorkers = 200
+
+while (await cursor.hasNext()) {
+  const document = await cursor.next()
+
+  // Basically sleep until there are workers available
+  // This prevents the queue to be flooded with millions of requests
+  while (workers >= maxWorkers) {
+    await new Promise(resolve => { setTimeout(resolve, 10) })
+  }
+
+  workers += 1
+  geocoder.search( { q: document.address } )
+    .then(result => {
+      workers += -1
+    }).catch((error) => {
+      workers += -1
+    })
+}
 ```
 
 ## Good to know
