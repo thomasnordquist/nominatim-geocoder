@@ -22,6 +22,7 @@ class Nominatim {
       customUrl: undefined, // if you want to host your own nominatim
       cache: true,
       delay: 1000, // Delay between requests
+      userAgent: 'thomasnordquist/nominatim-geocoder (+https://www.npmjs.com/package/nominatim-geocoder)',
     }
 
     const queryDefaults = {
@@ -88,7 +89,7 @@ class Nominatim {
           return
         }
 
-        axios.get(url, { params: queryObject.plainObject() })
+        axios.get(url, { params: queryObject.plainObject(), headers: { 'User-Agent': this.userAgent } })
           .then((response) => {
             resolve(response.data)
           })
