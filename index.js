@@ -22,6 +22,7 @@ class Nominatim {
       customUrl: undefined, // if you want to host your own nominatim
       cache: true,
       delay: 1000, // Delay between requests
+      headers: {} // customize the http headers
     }
 
     const queryDefaults = {
@@ -87,8 +88,11 @@ class Nominatim {
           resolve(cachedResponse)
           return
         }
-
-        axios.get(url, { params: queryObject.plainObject() })
+        
+        axios.get(url, { 
+          params: queryObject.plainObject(), 
+          headers: this.options.headers
+        })
           .then((response) => {
             resolve(response.data)
           })
